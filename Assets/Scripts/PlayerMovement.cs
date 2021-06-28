@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public float playerspeed,playerJumpForce,playerRadius;
     
     Rigidbody2D rb;
-
+    ScoreText score;
     bool facingRight;
     public bool isGrounded;
     public LayerMask layerMask;
@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         jumps = maxnumberofjumps;
+        score =GameObject.Find("ScoreManager").GetComponent<ScoreText>();
     }
 
     // Update is called once per frame
@@ -63,5 +64,13 @@ public class PlayerMovement : MonoBehaviour
     public void SuperJump()
     {
         rb.velocity = Vector2.up * playerJumpForce*1.25f;
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "coin")
+        {
+            Destroy(collision.gameObject);
+            score.Decrement();
+        }
     }
 }
