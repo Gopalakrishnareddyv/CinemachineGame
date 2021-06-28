@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float playerspeed,playerJumpForce,playerRadius;
-    
+    AudioSource audiocoin;
+    public AudioClip coinaudio;
+    public AudioClip jumpaudio;
     Rigidbody2D rb;
     ScoreText score;
     bool facingRight;
@@ -24,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     {
         jumps = maxnumberofjumps;
         score =GameObject.Find("ScoreManager").GetComponent<ScoreText>();
+        audiocoin = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -50,10 +53,14 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = Vector2.up * playerJumpForce;
             maxnumberofjumps -= 1;
+            audiocoin.clip = jumpaudio;
+            audiocoin.Play();
         }
         if (Input.GetButtonDown("Jump") && jumps == 0&&isGrounded==true)
         {
             rb.velocity = Vector2.up * playerJumpForce;
+            audiocoin.clip = jumpaudio;
+            audiocoin.Play();
         }
     }
     void Flip()
@@ -69,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.collider.tag == "coin")
         {
+            audiocoin.clip = coinaudio;
+            audiocoin.Play();
             Destroy(collision.gameObject);
             score.Decrement();
         }
